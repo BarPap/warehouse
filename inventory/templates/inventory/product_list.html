@@ -1,8 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Lista produktów {% endblock %} 
+{% block content %}
 {% if products %}
-<h1>Lista produktów</h1> 
-{% for product in products %}
-<li>{{product.name}} - ilość: {{ product.quantity }}</li>
-{% endfor %}
-{% else %}
-<h1>"Brak produktów w magazynie."</h1>
-{% endif %}
+    {% for product in products %}
+        <li>{{product.name}} - ilość: {{ product.quantity }}</li>   
+    {% endfor %}
+    {% else %}
+    <h1>"Brak produktów w magazynie."</h1>
+    {% endif %}
+{% endblock %}
