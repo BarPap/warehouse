@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}
+dodawanie produktu
+{% endblock %}
+{% block content %}
+
+<form action="" method="post">
+    {% csrf_token %}
+    {% if context.error %}
+        <p>{{error}}</p>
+    {% endif %}
+    <input type="text" name="name" id="" value= "{{ name }}" >
+    <input type="text" name="quantity" id="" value= "{{ quantity }}" >
+    <button type="submit">Dodaj</button>
+
+</form>
+
+{% endblock %}
