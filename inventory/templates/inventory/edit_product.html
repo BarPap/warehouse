@@ -1,0 +1,13 @@
+{% extends 'base.html' %} {% block title %} Edytowanie produktu: {{ product.name
+}} {% endblock %} {% block content %} Edytowanie produktu: {{ product.name }}
+<br />
+<form action="" method="post">
+  {% csrf_token %}
+  <input type="text" name="name" value="{{product.name}}" /> <br />
+  <input type="text" name="quantity" value="{{product.quantity}}" /> <br />
+  <button>
+    <nav><a href="/products/">anuluj</a></nav>
+  </button>
+  <button type="submit">Wyślij</button>
+</form>
+{% endblock %}

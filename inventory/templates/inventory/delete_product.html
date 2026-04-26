@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}
+usuwanie produktu: {{ product.name }} 
+{% endblock %}
+{% block content %}
+
+<form action="" method="post">
+    {% csrf_token %}
+    usuwanie produktu: {{ product.name }} <br>
+
+    Czy na pewno chcesz usunąć produkt? <br>
+    <button type="submit">Usuń</button>
+    <button type="button"> <nav> <a href="/products/">Anuluj</a></nav></button>
+
+</form>
+
+{% endblock %}
