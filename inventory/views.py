@@ -77,8 +77,8 @@ def edit_product(request, product_id):
 
     return render(request, "inventory/edit_product.html", {
         "errors": errors,
-        'name': product.name,
-        'quantity': product.quantity
+        'name': request.POST.get("name", "").strip(),
+        'quantity': request.POST.get("quantity", "").strip()
         })
 
 def delete_product(request, product_id):

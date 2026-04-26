@@ -1,5 +1,7 @@
-{% extends "base.html" %} {% block title %}Lista produktów {% endblock %} {%
-block content %} {% if products %} {% for product in products %}
+{% extends "base.html" %} {% block title %}Lista produktów {% endblock %} 
+{% block content %} 
+{% if products %} 
+{% for product in products %}
 <li>{{product.name}} - ilość: {{ product.quantity }}</li>
 <li>
   <nav>
@@ -11,6 +13,8 @@ block content %} {% if products %} {% for product in products %}
     <a href="/products/delete-product/{{ product.id }}/">Usuń</a>
   </nav>
 </li>
-{% endfor %} {% else %}
+{% endfor %} 
+{% else %}
 <h1>"Brak produktów w magazynie."</h1>
-{% endif %} {% endblock %}
+{% endif %} 
+{% endblock %}

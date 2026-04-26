@@ -3,9 +3,15 @@
 <br />
 <form action="" method="post">
   {% csrf_token %}
-  <input type="text" name="name" value="{{product.name}}" /> <br />
-  <input type="text" name="quantity" value="{{product.quantity}}" /> <br />
+  <input type="text" name="name" value="{{name}}" /> <br />
+      {% if errors.name  %}
+    <p> {{ errors.name }}</p>
+    {% endif %}
+  <input type="text" name="quantity" value="{{quantity}}" /> <br />
   <button>
+            {% if errors.quantity  %}
+    <p> {{ errors.quantity }}</p>
+    {% endif %}
     <nav><a href="/products/">anuluj</a></nav>
   </button>
   <button type="submit">Wyślij</button>
