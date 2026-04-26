@@ -1,36 +1,17 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Product
 
 
 def product_list(request):
-    products = [
-        {'name': 'Śrubka M8', 'quantity': 100},
-        {'name': 'Nakrętka M8', 'quantity': 50},
-        {'name': 'Podkładka stalowa', 'quantity': 200},
-    ]   
-    context = {"products": products}
-    return render(request, "inventory/product_list.html", context)
+    products = Product.objects.all()
+    return render(request, "inventory/product_list.html", {"products": products})
+
+
 
 def product_detail(request, product_id):
-    return HttpResponse(f"Szczegóły produktu nr: {product_id}")
+    product = get_object_or_404(Product, id=product_id)
+    return render(request, "inventory/product_detail.html", {"product": product})
 
-# to jest wersja bez walidacji danych z formularza - wersja ze sprawdzeniem typów, zakresów i logigi jest niżej
-# def add_product(request):
-#     error = None
-#     if request.method == 'GET':
-#         return render(request, "inventory/add_product.html", {'error': error})
-    
-#     if request.method == 'POST':
-
-#         name = request.POST.get("name", '').strip().lower()
-#         quantity = request.POST.get('quantity', '').strip().lower()        
-
-#         if not name or not quantity:
-#             error = 'pusta nazwa albo brak ilości'
-#             context = {'error': error, 'name': name, 'quantity': quantity}
-#             return render(request, "inventory/add_product.html", context)
-#         else:
-#             return redirect('/products/')
 
 def add_product(request):
     errors = {}
@@ -55,6 +36,7 @@ def add_product(request):
             errors['quantity'] = 'Ilość musi być liczbą całkowitą'
 
         if not errors:
+            Product.objects.create(name=name, quantity=quantity)
             return redirect('/products/')
 
     return render(request, "inventory/add_product.html", {

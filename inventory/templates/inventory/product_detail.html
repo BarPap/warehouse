@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Szczegóły produktu: {{ product }}
+{% endblock %}
+
+{% block content %}
+Szczegóły produktu: {{ product }} <br>
+Ilość: {{ product.quantity }}
+{% endblock %}
