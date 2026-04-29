@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}
+Strona logowania
+{% endblock %}
+
+{% block content %}
+
+<form action="" method="post">
+    {% csrf_token %}
+
+    <input type="text" name="username" placeholder= "wpisz nazwe użytkownika" >
+    {% if errors.username  %}
+    <p> {{ errors.username }}</p>
+    {% endif %}
+
+    <input type="password" name="password" placeholder="Wpisz hasło">
+        {% if errors.password  %}
+    <p> {{ errors.password }}</p>
+    {% endif %}
+    <button type="submit">zaloguj</button>
+
+</form>
+
+
+{% endblock %}
