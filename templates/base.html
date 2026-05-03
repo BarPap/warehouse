@@ -6,6 +6,21 @@
     <title>{% block title %}Strona Base {% endblock %}</title>
 </head>
 <body>
+    {% if request.user.is_authenticated %}
+    zalogowano jako {{ request.user.username }}
+    <form action="/accounts/logout/" method="post">
+        {% csrf_token %}
+        <button type="submit">wyloguj</button>
+    </form>
+
+    {% else %}
+    Niezalogowano
+
+            <a href="/accounts/login/">
+                Zaloguj
+            </a>
+
+    {% endif %}
     <nav>  <a href="/products/"> Lista produktów  </a></nav>
 
     {% block content %} {% endblock %}
