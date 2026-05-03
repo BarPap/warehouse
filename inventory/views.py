@@ -1,11 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product
 from django.contrib.auth import authenticate
+from django.contrib.auth.decorators import login_required
 
-@login_requaired
+@login_required
 def product_list(request):
-    if not request.user.is_authenticated:
-        return redirect('/accounts/login/')
     products = Product.objects.all()
     return render(request, "inventory/product_list.html", {"products": products})
 
