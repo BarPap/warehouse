@@ -14,7 +14,7 @@ def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     return render(request, "inventory/product_detail.html", {"product": product})
 
-
+@login_required
 def add_product(request):
     errors = {}
 
@@ -47,6 +47,7 @@ def add_product(request):
         'quantity': request.POST.get('quantity', '')
     })
 
+@login_required
 def edit_product(request, product_id):
     errors = {}
     product = get_object_or_404(Product, id=product_id)
@@ -83,6 +84,7 @@ def edit_product(request, product_id):
         'quantity': request.POST.get("quantity", "").strip()
         })
 
+@login_required
 def delete_product(request, product_id):
     product = get_object_or_404(Product, id=product_id)
 
