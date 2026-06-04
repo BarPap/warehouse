@@ -12,7 +12,7 @@
             {% if errors.quantity  %}
     <p> {{ errors.quantity }}</p>
     {% endif %}
-    <nav><a href="/products/">anuluj</a></nav>
+    <nav><a href="{% url 'product_list' %}">anuluj</a></nav>
   </button>
   <button type="submit">Wyślij</button>
 </form>

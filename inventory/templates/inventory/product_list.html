@@ -5,12 +5,12 @@
 <li>{{product.name}} - ilość: {{ product.quantity }}</li>
 <li>
   <nav>
-    <a href="/products/edit-product/{{ product.id }}/"> Edytuj </a>
+    <a href="{% url 'edit_product' product.id %}"> Edytuj </a>
   </nav>
 </li>
 <li>
   <nav>
-    <a href="/products/delete-product/{{ product.id }}/">Usuń</a>
+    <a href="{% url 'delete_product' product.id %}">Usuń</a>
   </nav>
 </li>
 {% endfor %} 

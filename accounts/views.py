@@ -21,7 +21,7 @@ def login_view(request):
 
         if user:
             login(request, user)
-            return redirect('/products/')
+            return redirect('product_list')
         else:
             return render(request, 'accounts/login.html', {"errors": errors})
 
@@ -30,8 +30,8 @@ def login_view(request):
 def logout_view(request):
     if request.method == 'POST':
         logout(request)
-        return redirect('/accounts/login/')
-    return redirect('/products/')
+        return redirect('login_view')
+    return redirect('product_list')
 
 def register_view(request):
     if request.method == 'POST':
@@ -39,7 +39,7 @@ def register_view(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('/products/')
+            return redirect('product_list')
         else:
             return render(request, "accounts/register.html", {"form": form})
     else: #czyli if request.method == 'GET':

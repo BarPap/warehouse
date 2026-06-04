@@ -10,7 +10,7 @@ usuwanie produktu: {{ product.name }}
 
     Czy na pewno chcesz usunąć produkt? <br>
     <button type="submit">Usuń</button>
-    <button type="button"> <nav> <a href="/products/">Anuluj</a></nav></button>
+    <button type="button"> <nav> <a href="{% url 'product_list' %}">Anuluj</a></nav></button>
 
 </form>
 

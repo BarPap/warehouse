@@ -46,7 +46,7 @@ def add_product(request):
         if not errors:
             quantity = int(quantity_str)
             Product.objects.create(name=name, quantity=quantity)
-            return redirect('/products/')
+            return redirect('product_list')
 
     return render(request, "inventory/add_product.html", {
         'errors': errors,
@@ -76,7 +76,7 @@ def edit_product(request, product_id):
             product.quantity = quantity
             product.save()
 
-            return redirect('/products/')
+            return redirect('product_list')
 
     return render(request, "inventory/edit_product.html", {
         "errors": errors,
@@ -93,6 +93,6 @@ def delete_product(request, product_id):
     
     if request.method == 'POST':
         product.delete()
-        return redirect('/products/')
+        return redirect('product_list')
     
     return render(request, 'inventory/delete_product.html', {'product': product})
