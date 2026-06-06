@@ -113,3 +113,23 @@ def product_list_api(request):
             serializer.save()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+    
+@api_view(['GET','PUT', 'DELETE'])
+def product_detail_api(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    serializer = ProductSerializer(product)
+
+    if request.method == 'GET':
+        return Response(serializer.data)
+    
+    if request.method == 'DELETE':
+        product.delete()
+        return Response(status=204)
+    
+    if request.method == 'PUT':
+        serializer = ProductSerializer(product, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=200)
+        else:
+            return Response(status=400)
