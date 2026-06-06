@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product
 from django.contrib.auth.decorators import login_required
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .serializers import ProductSerializer
 
 def validate_product_form(name, quantity_str):
         errors = {}
@@ -96,3 +99,17 @@ def delete_product(request, product_id):
         return redirect('product_list')
     
     return render(request, 'inventory/delete_product.html', {'product': product})
+
+@api_view(['GET', 'POST'])
+def product_list_api(request):
+    if request.method == 'GET':
+        products = Product.objects.all()
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data)
+    
+    if request.method == 'POST':
+        serializer = ProductSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
