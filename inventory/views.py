@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import ProductSerializer
+from .forms import ProductForm
 
 def validate_product_form(name, quantity_str):
         errors = {}
@@ -32,60 +33,85 @@ def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     return render(request, "inventory/product_detail.html", {"product": product})
 
+# @login_required
+# def add_product(request):
+#     errors = {}
+
+#     if request.method == 'GET':
+#         return render(request, "inventory/add_product.html", {'errors': errors})    
+    
+#     if request.method == 'POST':
+#         name = request.POST.get("name", "").strip()
+#         quantity_str = request.POST.get('quantity', '').strip()
+        
+#         errors = validate_product_form(name, quantity_str)
+
+
+#         if not errors:
+#             quantity = int(quantity_str)
+#             Product.objects.create(name=name, quantity=quantity)
+#             return redirect('product_list')
+
+#     return render(request, "inventory/add_product.html", {
+#         'errors': errors,
+#         'name': request.POST.get('name', ''),
+#         'quantity': request.POST.get('quantity', '')
+#     })
+
+
 @login_required
 def add_product(request):
-    errors = {}
-
     if request.method == 'GET':
-        return render(request, "inventory/add_product.html", {'errors': errors})    
-    
+        return render(request, "inventory/add_product.html", {'form': ProductForm()})
     if request.method == 'POST':
-        name = request.POST.get("name", "").strip()
-        quantity_str = request.POST.get('quantity', '').strip()
-        
-        errors = validate_product_form(name, quantity_str)
-
-
-        if not errors:
-            quantity = int(quantity_str)
-            Product.objects.create(name=name, quantity=quantity)
+        all_data = ProductForm(request.POST)
+        if all_data.is_valid():
+            all_data.save()
             return redirect('product_list')
-
-    return render(request, "inventory/add_product.html", {
-        'errors': errors,
-        'name': request.POST.get('name', ''),
-        'quantity': request.POST.get('quantity', '')
-    })
+    return render(request, "inventory/add_product.html", {'form': all_data})
 
 @login_required
 def edit_product(request, product_id):
-    errors = {}
-    product = get_object_or_404(Product, id=product_id)
+    producd_from_db = get_object_or_404(Product, id=product_id)
+    form = ProductForm(instance=producd_from_db)
 
     if request.method == 'GET':
-        return render(request, 'inventory/edit_product.html', {'errors': errors, 'product': product})
-    
+        return render(request, 'inventory/edit_product.html', {'form': form})
     if request.method == 'POST':
-        name = request.POST.get("name", "").strip()
-        quantity_str = request.POST.get("quantity", "").strip()
-
-        errors = validate_product_form(name, quantity_str)
-
-
-
-        if not errors:
-            quantity = int(quantity_str)
-            product.name = name
-            product.quantity = quantity
-            product.save()
-
+        form = ProductForm(request.POST, instance=producd_from_db)
+        if form.is_valid():           
+            form.save()
             return redirect('product_list')
+    return render(request, 'inventory/edit_product.html', {'form': form})
 
-    return render(request, "inventory/edit_product.html", {
-        "errors": errors,
-        'name': request.POST.get("name", "").strip(),
-        'quantity': request.POST.get("quantity", "").strip()
-        })
+
+# @login_required
+# def edit_product(request, product_id):
+#     errors = {}
+#     product = get_object_or_404(Product, id=product_id)
+
+#     if request.method == 'GET':
+#         return render(request, 'inventory/edit_product.html', {'errors': errors, 'product': product})
+    
+#     if request.method == 'POST':
+#         name = request.POST.get("name", "").strip()
+#         quantity_str = request.POST.get("quantity", "").strip()
+
+#         errors = validate_product_form(name, quantity_str)    
+
+#         if not errors:
+#             quantity = int(quantity_str)
+#             product.name = name
+#             product.quantity = quantity
+#             product.save()
+
+#             return redirect('product_list')
+
+#     return render(request, "inventory/edit_product.html", {
+#         "errors": errors,
+#         'name': request.POST.get("name", "").strip(),
+#         'quantity': request.POST.get("quantity", "").strip()
+#         })
 
 @login_required
 def delete_product(request, product_id):

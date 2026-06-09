@@ -4,10 +4,19 @@ dodawanie produktu
 {% endblock %}
 {% block content %}
 
-<form action="" method="post">
+<form action="" method="post" novalidate>
     {% csrf_token %}
 
-    <input type="text" name="name" id="" value= "{{ name }}" >
+    {{ form }}
+    <button type="submit">Dodaj</button>
+
+</form>
+
+{% endblock %}
+
+
+
+    <!-- <input type="text" name="name" id="" value= "{{ name }}" >
     {% if errors.name  %}
     <p> {{ errors.name }}</p>
     {% endif %}
@@ -16,8 +25,4 @@ dodawanie produktu
         {% if errors.quantity  %}
     <p> {{ errors.quantity }}</p>
     {% endif %}
-    <button type="submit">Dodaj</button>
-
-</form>
-
-{% endblock %}
+    <button type="submit">Dodaj</button> -->
