@@ -5,22 +5,19 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import ProductSerializer
 from .forms import ProductForm
-from django.views.generic import CreateView, UpdateView, DeleteView
+from django.views.generic import CreateView, UpdateView, DeleteView, ListView, DetailView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-@login_required
-def product_list(request):
-    products = Product.objects.all()
-    return render(request, "inventory/product_list.html", {"products": products})
+class ProductListView(LoginRequiredMixin, ListView):
+    model = Product
+    context_object_name = 'products'
+    template_name = "inventory/product_list.html"
 
-
-@login_required
-def product_detail(request, product_id):
-    product = get_object_or_404(Product, id=product_id)
-    return render(request, "inventory/product_detail.html", {"product": product})
-
+class ProductDetailView(LoginRequiredMixin, DetailView):
+    model = Product
+    template_name = "inventory/product_detail.html"
 
 class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
@@ -40,18 +37,8 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'inventory/delete_product.html'
     success_url = reverse_lazy('product_list')
 
-@login_required
-def delete_product(request, product_id):
-    product = get_object_or_404(Product, id=product_id)
 
-    if request.method == 'GET':
-        return render(request, 'inventory/delete_product.html', {'product': product})
-    
-    if request.method == 'POST':
-        product.delete()
-        return redirect('product_list')
-    
-    return render(request, 'inventory/delete_product.html', {'product': product})
+
 
 @api_view(['GET', 'POST'])
 def product_list_api(request):
