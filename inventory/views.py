@@ -5,22 +5,10 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import ProductSerializer
 from .forms import ProductForm
+from django.views.generic import CreateView, UpdateView
+from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-def validate_product_form(name, quantity_str):
-        errors = {}
-        if not name:
-            errors['name'] = 'Nazwa nie może być pusta'
-        elif len(name) < 3:
-            errors['name'] = 'Nazwa nie może być krótsza niż 3 znaki'
-
-        try:
-            quantity = int(quantity_str)
-            if quantity < 0:
-                errors['quantity'] = "Ilość nie może być liczbą ujemną"
-        except ValueError:
-            errors['quantity'] = "Ilość musi być liczbą całkowitą"
-        
-        return errors
 
 @login_required
 def product_list(request):
@@ -34,30 +22,19 @@ def product_detail(request, product_id):
     return render(request, "inventory/product_detail.html", {"product": product})
 
 
-@login_required
-def add_product(request):
-    if request.method == 'GET':
-        return render(request, "inventory/add_product.html", {'form': ProductForm()})
-    if request.method == 'POST':
-        all_data = ProductForm(request.POST)
-        if all_data.is_valid():
-            all_data.save()
-            return redirect('product_list')
-    return render(request, "inventory/add_product.html", {'form': all_data})
+class ProductCreateView(LoginRequiredMixin, CreateView):
+    model = Product
+    form_class = ProductForm
+    template_name = 'inventory/add_product.html'
+    success_url = reverse_lazy('product_list')
 
-@login_required
-def edit_product(request, product_id):
-    producd_from_db = get_object_or_404(Product, id=product_id)
-    form = ProductForm(instance=producd_from_db)
 
-    if request.method == 'GET':
-        return render(request, 'inventory/edit_product.html', {'form': form})
-    if request.method == 'POST':
-        form = ProductForm(request.POST, instance=producd_from_db)
-        if form.is_valid():           
-            form.save()
-            return redirect('product_list')
-    return render(request, 'inventory/edit_product.html', {'form': form})
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
+    form_class = ProductForm
+    model = Product
+    template_name = 'inventory/edit_product.html'
+    success_url = reverse_lazy('product_list')
+
 
 @login_required
 def delete_product(request, product_id):
