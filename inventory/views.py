@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import ProductSerializer
 from .forms import ProductForm
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -35,6 +35,10 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'inventory/edit_product.html'
     success_url = reverse_lazy('product_list')
 
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
+    model = Product
+    template_name = 'inventory/delete_product.html'
+    success_url = reverse_lazy('product_list')
 
 @login_required
 def delete_product(request, product_id):
