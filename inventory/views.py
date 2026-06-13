@@ -54,12 +54,12 @@ def product_list_api(request):
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
     
-@api_view(['GET','PUT', 'DELETE'])
+@api_view(['GET', 'PUT', 'DELETE'])
 def product_detail_api(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-    serializer = ProductSerializer(product)
 
     if request.method == 'GET':
+        serializer = ProductSerializer(product)
         return Response(serializer.data)
     
     if request.method == 'DELETE':
